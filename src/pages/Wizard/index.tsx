@@ -12,11 +12,12 @@ import '@ui5/webcomponents-icons/dist/account';
 import { loyalityApiService } from '../../services/Loyality';
 import CampaingComponent from '../../components/CampaingComponent';
 import LoyalityPointCompponent from '../../components/LoyalityPointCompponent';
-import { IOperaUserInfo,IloyaltyMembershipPointModel,IloyaltyProgramPointConversionModel} from '../../models/OperaUserInfo/index';
+import { IUserInfo } from '../../models/UserInfo/index';
 import CampaingOutComponent from   '../../components/CampaingOutComponent';
 import {  useNavigate} from "react-router-dom";
 import { setPointConversion } from '../../store/private/userSlice';
 import {  useDispatch } from "react-redux";
+import { Logo}   from "../../components/logo";
 
 const WizardPage = () => {
 
@@ -24,41 +25,24 @@ const WizardPage = () => {
   const dispatch = useDispatch();
   
   const [reservationNo, setReservationNo] = useState<number | any>();
-  const [userInfo, setuserInfo] = useState<IOperaUserInfo>();
+  const [userInfo, setuserInfo] = useState<IUserInfo>();
   const [username, setUsername] = useState<string>();
   
  
   useEffect(() => {
-    const items = JSON.parse(localStorage.getItem('loginuser'));
+    const items = JSON.parse(localStorage.getItem('loginuser') as string);
     if(items == null || !items?.username){
       navigate('/');
       return;
     }
     setUsername(items);
-    setTimeout(async() => {
-      await getlLoyaltyProgramPointConversion();
-    }, 250);
-
   }, [reservationNo]);
 
 
-  const getlLoyaltyProgramPointConversion=  async () => {
-    loyalityApiService.getlLoyaltyProgramPointConversion().then(response => {
-      if (response.data && response.data.statusCode == 200) {
-        const result = response.data?.result;
-        // setPointConversion(result[0]);
-        dispatch(setPointConversion(result[0]));
-      }
-    })
+  const getUser=  async () => {
+   
   }
  
-  const logo = (
-    <img
-      src='https://www.dijiplus.com/wp-content/uploads/2019/06/divan-logo.png'
-      alt='Divan Logo'
-    />
-  );
-
   return (
     <div className='wizard-page'>
       {
@@ -69,12 +53,12 @@ const WizardPage = () => {
             <FlexBox className={'header'}>
               <FlexBox className={'logo'}>
                 <img
-                  src='https://www.dijiplus.com/wp-content/uploads/2019/06/divan-logo.png'
-                  alt='Divan Logo'
+                  src={Logo}
+                  alt=' Logo'
                 />
               </FlexBox>
               <FlexBox className={'user-info'}>
-                <Text>{username?.username}</Text>
+                <Text>{username}</Text>
               </FlexBox>
               <FlexBox className={'avatar'}>
                 <Avatar icon={'customer'} />

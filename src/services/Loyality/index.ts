@@ -1,7 +1,7 @@
 import HttpClient from '../http-client-base';
 
 import { IResponseModel } from '../../models';
-import { IOperaUserInfo,IloyaltyMembershipPointModel,IloyaltyProgramPointConversionModel,IloyaltyCampaing} from '../../models/OperaUserInfo/index';
+import { IOperaUserInfo,IloyaltyMembershipPointModel,IloyaltyProgramPointConversionModel,IloyaltyCampaing} from '../../models/UserInfo/index';
 import axios from 'axios';
 import Config from '../../config';
 import { AxiosRequestConfig } from 'axios';
