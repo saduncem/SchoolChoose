@@ -1,5 +1,5 @@
 {
-  "name": "divan-cp-client-vite",
+  "name": "schoolChoose-cp-client-vite",
   "version": "0.0.0",
   "scripts": {
     "start": "echo Starting the development server && vite",

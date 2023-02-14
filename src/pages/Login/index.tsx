@@ -30,22 +30,23 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState<any>();
   const [token, setToken] = useState<any>();
 
-
   useEffect(()=>{
-         getUserInfo();
+         console.log('geldi')
   },[]);
-  const getUserInfo = async () => {
-    loyalityApiService.getDomainUser().then(response => {
-      if (response.data && response.data.statusCode == 200) {
-        const result = response.data.result;
-        setToken(result);
-        console.log(response);
-      }
-      else if (response.error) (
-        alert(response.error.message)
-      )
-    })
-  };
+ 
+ 
+  // const getUserInfo = async () => {
+  //   loyalityApiService.getDomainUser().then(response => {
+  //     if (response.data && response.data.statusCode == 200) {
+  //       const result = response.data.result;
+  //       setToken(result);
+  //       console.log(response);
+  //     }
+  //     else if (response.error) (
+  //       alert(response.error.message)
+  //     )
+  //   })
+  // };
 
   const handleSubmit =  useCallback((e:any) => {
     e.preventDefault();

@@ -4,9 +4,8 @@ interface IConfig {
   isDevelopment: boolean,
   requestTimeout: number,
   externalRequestTimeout: number,
-  divanLoyalityToken: string,
-  divanSystemId: string,
-  divanGetUserInfoApiUrl: string,
+  token: string,
+  getUserInfoApiUrl: string,
   accountsByLoyaltyMembershipUrl: string
 }
 
@@ -26,10 +25,9 @@ let Config: IConfig =  {
   isDevelopment: true,
   requestTimeout: 1000 * 60, //  MiliSecond
   externalRequestTimeout: 1000 * 60, //  MiliSecond
-  divanLoyalityToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsibXMvYWRtaW4iLCJtcy91c2VyIiwibXcvYWRtaW5hcHAiXSwidXNlcl9uYW1lIjoidXNlciIsInNjb3BlIjpbInJvbGVfdXNlciJdLCJsYW5nQ29kZSI6IlRSIiwidXNyX25hbWUiOiJ1c2VyIiwiZXhwIjoxNjcwNTg1NzQ3LCJ1c2VySWQiOjIsImF1dGhvcml0aWVzIjpbInJvbGVfdXNlciIsIkFETUlOIl0sImp0aSI6ImQyYWU2YTEzLTE2Y2ItNGY2Yi04OWZjLThlNDY4YzlhYTQ4YyIsImVtYWlsIjoiZW1haWwyIiwiY2xpZW50X2lkIjoiYWRtaW5hcHAifQ.v-xIGNeQV-MMxSswSVQiQXJ8oRRzKt8-ovT-lXymn-s', // Bearer
-  divanSystemId: 'OPERA',
-  divanGetUserInfoApiUrl: 'https://divanloyaltydev.cfapps.eu10.hana.ondemand.com/customer/getById',
-  accountsByLoyaltyMembershipUrl:'https://divanloyaltydev.cfapps.eu10.hana.ondemand.com/account/loyaltyMembershipAccounts/'
+  token: '', // Bearer
+  getUserInfoApiUrl: 'https://',
+  accountsByLoyaltyMembershipUrl:'https://'
 };
 
 export default Config;
