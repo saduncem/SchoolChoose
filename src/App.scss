@@ -5,133 +5,42 @@
       rgba(161, 209, 226, 1) 0%,
       rgba(13, 120, 176, 1) 100%,
       rgba(0, 212, 255, 1) 100%);
-
-  .login-page {
-    height: 100vh;
-    margin: 0px 50px;
-
-
-    .logo {
-      height: 200px;
-      margin-top: 40px;
-
-      >img {
-        width: 200px;
-        height: 83px;
-      }
-    }
-
-    .content-wrap {
-      flex-basis: 55%;
-
-      .first-column {
-        margin: 0 50px;
-        flex-basis: 50%;
-        align-items: center;
-
-        .title {
-          font-weight: 300;
-          font-size: x-large;
-          margin-bottom: 20px;
-          color: gray;
-        }
-
-        .description {
-          color: aliceblue;
-          font-size: large;
-        }
-      }
-
-      .secondary-column {
-        flex-basis: 50%;
-
-        .card {
-          width: fit-content;
-          height: fit-content;
-          box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-
-          .form-group {
-            margin: 0px 25px;
-            padding: 10px;
-
-            .form-label {
-              width: 100px;
-              text-align: start;
-              align-items: center;
-              font-size: medium;
-            }
-
-            &:nth-child(1) {
-              margin-top: 30px;
-            }
-          }
-
-          .btn-submit {
-            margin: 20px 35px 35px;
-            padding: 0 20px;
-          }
-        }
-      }
-    }
-  }
+  
 
   .wizard-page {
     height: 100vh;
-    background-color: #F6F6F6;
-
+    background: #eaafc8;
+    background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);
+    background: linear-gradient(to right, #eaafc8, #654ea3);
+  
     .header {
-      height: 50px;
+      height: 60px;
       padding: 10px 40px;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-      justify-content: space-between;
-
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
       .logo {
-        height: 40px;
+        height: 60px;
         width: auto;
         flex: 1;
       }
-
-      .user-info {
-        padding: 10px;
-        font-size: medium;
-        align-self: center;
-      }
-
-      .avatar {
-        // margin-left: 20px;
-      }
+     
     }
 
     .wizard-wrap {
-      width: 75%;
       margin: 50px auto;
-
       .title {
         margin: 30px 0;
       }
-
       .content {
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
-        .sub-title {
-          margin: 20px;
-
-        }
-
+        background: #eaafc8;
         .form-wrap {
           padding: 0 30px;
-
+          background: #eaafc8;
           .form-label {
             margin: 15px 0;
             text-align: start;
             align-items: center;
             font-size: medium;
           }
-        }
-
-        .table {
-          padding: 20px;
-          flex-direction: row;
         }
 
         .btn-step {

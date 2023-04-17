@@ -1,35 +1,35 @@
 import HttpClient from '../http-client-base';
 
 import { IResponseModel } from '../../models';
-import { IOperaUserInfo,IloyaltyMembershipPointModel,IloyaltyProgramPointConversionModel,IloyaltyCampaing} from '../../models/UserInfo/index';
+import { ICity} from '../../models/City/index';
+import { IUserInfo} from '../../models/UserInfo/index';
 import axios from 'axios';
 import Config from '../../config';
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig ,HeadersDefaults} from 'axios';
+
 
 let InfoAxiosConfig: AxiosRequestConfig = {
    method: 'GET',
    timeout: Config.externalRequestTimeout,
    withCredentials: false,
    headers: {
-    'Authorization': `Bearer ${Config.token}`,
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': `application/json`,
    }
  }
 
-export class LoyalityApiService extends HttpClient {
+export class ApiService extends HttpClient {
    public constructor() {
-      super('loyality');
+      super('egitim');
    }
-
   
-   public getUserInfo = async (confirmationNo: any) => await this.instance.get<IResponseModel<IOperaUserInfo>>(`user-info/${confirmationNo}`);
+   public getUserInfo = async (confirmationNo: any) => await this.instance.get<IResponseModel<IUserInfo>>(`user-info/${confirmationNo}`);
+   public getCity = async () => await this.instance.get<IResponseModel<ICity>>(`/cities`);
+   public getDistricts = async (cityid : any) => await this.instance.get<IResponseModel<ICity>>(`/districts/${cityid}`);
    public getDomainUser= async () => await this.instance.get<IResponseModel<string>>(`GetUserName`);
-   public getCustomerById = async (nameId: number) => {
-    InfoAxiosConfig.params = {
-      'externalId': nameId
-    }
-
-    return await axios.get(Config.baseApiUrl, InfoAxiosConfig);
-   }
+   public getCityList = async () => {
+      return await axios.get(Config.cities,InfoAxiosConfig);
+     }
 }
 
-export const loyalityApiService = new LoyalityApiService();
+export const apiService = new ApiService();

@@ -4,113 +4,66 @@ import {
   FlexBox,
   FlexBoxDirection,
   Label,
-  Input,
-  InputType,
   Button,
   ButtonDesign,
   Table,
-  TableCell,
   TableColumn,
-  TableRow,
   Loader,
-  Page
+  Page,
+  Select ,
+  Option
 } from '@ui5/webcomponents-react';
+
 import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import { WizardStepDomRef } from '@ui5/webcomponents-react/webComponents/WizardStep';
-import { loyalityApiService } from '../services/Loyality/index';
+import { apiService } from '../services/Loyality/index';
 import { Ui5CustomEvent } from '@ui5/webcomponents-react/interfaces/Ui5CustomEvent';
 import { useSelector, useDispatch } from "react-redux";
-import { setUserinfo, userData,   setCampaingList } from '../../src/store/private/userSlice';
-
+import { setCityList ,userData } from '../../src/store/private/userSlice';
+import axios from 'axios';
 const CampaingComponent = () => {
 
+  const data = [{"id":0,"cityCode":"50","cityName":"Şehirler","countryId":217,"createdBy":1,"createdDate":"2023-02-12","modifiedBy":1,"modifiedDate":"2023-02-12"},{"id":5,"cityCode":"05","cityName":"AMASYA","countryId":217,"createdBy":1,"createdDate":"2023-02-12","modifiedBy":1,"modifiedDate":"2023-02-12"}];
   const step1 = useRef<WizardStepDomRef>(null);
   const step2 = useRef<WizardStepDomRef>(null);
   const step3 = useRef<WizardStepDomRef>(null);
   const step4 = useRef<WizardStepDomRef>(null);
   const [steps] = useState([step1, step2, step3,step4]);
-  const [reservationNo, setReservationNo] = useState<number | any>();
-  const [campaingDetail, setCampaingDetail] = useState<any>();
-  const { userInfo, pointInfo, CampaingList } = useSelector(userData)
+  const { cityList } = useSelector(userData)
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     steps.forEach((step, i) => {
-    
       if (i !== 0 && step.current != null) {
         step.current.disabled = true;
       }
-      const items = JSON.parse(localStorage.getItem('loginuser'));
-      // setCampaingDetail(deta);
-      // goToStep(4);
     });
-    // if(!pointInfo) {
-    //   try {
-     
-    //     loyalityApiService.getlLoyaltyProgramPointConversion().then(res =>
-    //       dispatch(setPointConversion(res.data?.result))
-    //     );
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
+  getCityList(data);
   }, []);
 
-  const getUserInfo = async () => {
-      if(!reservationNo){
-        return;
-      }
+  const getCityList = async (param) => {
       try {
+
         setLoading(true);
-        const result = await loyalityApiService.getUserInfo(+reservationNo);
-        if(result?.data?.result === null) {
-          alert(result?.data.message);
-          setLoading(false);
-          return;
-        }
-        dispatch(setUserinfo(result?.data?.result));
-        console.log("userinfo :",result?.data?.result);
-        if(result?.data?.result.isHotelRunner) {
-         
-          alert("Hotel Runner Kaydı Crm'den Başarı ile alınmıştır. İşlem Tamamlanmıştır");
-          setLoading(false);
-          return;
-        }
-        if(result?.data?.result.isExistCampaing) {
-          alert("Bu Hotel Runner rezervasyonu için   daha önce Crm'den kayı alınmıştır");
-          setLoading(false);
-          return;
-        }
+        // const result = await apiService.getCityList();
+        // if(result?.data?.result === null) {
+        //   alert(result?.data.message);
+        //   setLoading(false);
+        //   return;
+        // }
+        dispatch(setCityList(param));
         setLoading(false);
-        goToStep(2);
       } catch (error) {
         console.log(error);
       }
   }
 
 
-  const SendCampign = useCallback(() => {
+  const GetDistricts = useCallback(() => {
 
-    const items = JSON.parse(localStorage.getItem('loginuser'));
-    let benefitMap = JSON.parse(JSON.stringify(campaingDetail));
-     delete benefitMap.uuid;
-     delete benefitMap.id;
-     delete benefitMap.campaignPayment.uuid;
-     delete benefitMap.campaignPayment.id;
-    const postdata = {
-      CampaingName:campaingDetail?.campaign?.name,
-      Campaingid :campaingDetail?.campaign?.uuid,
-      Nameid:userInfo.nameId,
-      Reservasyonid:userInfo.reservationNo,
-      status:"YENİ",
-      username:items?.username,
-      campaignTransactionId:CampaingList?.campaignTransactionId,
-      memberuuid:CampaingList?.loyaltyMembership.uuid,
-    }
-   
    setLoading(true);
-    loyalityApiService.SetCampign(postdata).then(response => {
+    apiService.getCity(1).then(response => {
       if (response.data && response.data.statusCode == 200) {
         const result = response.data.result?.data;
         setLoading(false);
@@ -121,18 +74,17 @@ const CampaingComponent = () => {
         setLoading(false);
       }
     });
-  },[campaingDetail,userInfo]);
+  },[cityList]);
 
   const GetDetail = useCallback((param) => {
-    setCampaingDetail(param);
     goToStep(4);
   },[]);
 
   const getCampainInfo = async (param: any) => {
     setLoading(true);
-    loyalityApiService.getCampainInfo(param).then(response => {
+    apiService.getDistricts(param).then(response => {
       if (response.data && response.data.statusCode == 200) {
-        dispatch(setCampaingList(response.data.result?.data));
+        // dispatch(setCampaingList(response.data.result?.data));
         setLoading(false);
         goToStep(3);
       }
@@ -142,32 +94,7 @@ const CampaingComponent = () => {
       }
     })
   }
- 
-  const ListRow = (props: any) => {
-    return (
-      <>
-        {props?.param?.benefitTMaps?.map((item: any) =>
-          <TableRow key={item?.id}>
-            <TableCell>
-              <Label>{item?.campaign?.name} </Label>
-            </TableCell>
-            <TableCell>
-              <Label>{item?.campaign?.statusType?.statusTypeId}</Label>
-            </TableCell>
-            <TableCell>
-              <Label>{item?.campaign?.startDateTime}</Label>
-            </TableCell>
-            <TableCell>
-              <Label>{item?.campaign?.campaignType?.name}</Label>
-            </TableCell>
-            <TableCell>
-        <Button   icon="employee"  onClick={() => GetDetail(item)}    >    SEÇ   </Button>
-            </TableCell>
-          </TableRow>
-        )}
-      </>
-    )
-  };
+  
 
   const goToStep = (stepIndex: number) => {
     steps.forEach((step, index) => {
@@ -183,35 +110,38 @@ const CampaingComponent = () => {
     });
   };
 
+  const onChangeCity = (param:any)=> {
+    console.log(param);
+    goToStep(2)
+  }
+  
 
-
+  const onChangeDiscty = (param:any)=> {
+    console.log(param)
+  }
   return (
     <Wizard className={'content'} style={{
       height: '500px',
     }}>
-      <WizardStep id='1'  selected ref={step1} icon="product" titleText="Sadakat Programı Üyelik Kontrolü"  >
+      <WizardStep id='1'  selected ref={step1} icon="product" titleText="Şehir Seç"  >
         <FlexBox className={'form-wrap'} direction={FlexBoxDirection.Column} style={{
     backgroundColor:'white'
   }}> 
-          <Label className={'form-label'} style={{fontWeight:'bold'}}>Confirmation  No</Label>
-          <Input onChange={(event: Ui5CustomEvent<HTMLInputElement, never>) => setReservationNo(event.target.value)} type={InputType.Text} />
-          {/* <Label className={'form-label'} style={{fontWeight:'bold'}}>Folio No</Label>
-          <Input type={InputType.Text} /> */}
+          <Label className={'form-label'} style={{fontWeight:'bold'}}>Şehir Listesi</Label>
+          { <Select 
+          onChange={onChangeCity}
+        >
+         {data.map((item) => (
+          <Option key={item.id} data-id={item.id}>
+            {item.cityName}
+          </Option>
+  ))}
+        </Select> }
+          
         </FlexBox>
-
-       
-        {loading && <Loader />}
-          <Button
-            id="openResponsivePopoverBtn"
-            className={'btn-step'}
-            design={ButtonDesign.Emphasized}
-            onClick={() => getUserInfo()}
-          >
-            Sorgula ve Devam Et
-          </Button>
           
       </WizardStep>
-      <WizardStep id='2' ref={step2} icon="product" titleText="Üye Bilgisi">
+      <WizardStep id='2' ref={step2} icon="product" titleText="İlçe Listesi">
 
         <FlexBox className={'table'} style={{
     backgroundColor:'white'
@@ -237,23 +167,7 @@ const CampaingComponent = () => {
               </>
             }
           >
-            <TableRow>
-              <TableCell>
-                <Label>{userInfo?.name}  {userInfo?.lastName} </Label>
-              </TableCell>
-              <TableCell>
-                <Label>{userInfo?.membershipDetail?.contactByPhone?.communicationValue}</Label>
-              </TableCell>
-              <TableCell>
-                <Label>{userInfo?.cinsiyet}</Label>
-              </TableCell>
-              <TableCell>
-                <Label>{userInfo?.uyruk}</Label>
-              </TableCell>
-              <TableCell>
-                <Label>{userInfo?.uyelikTipi}</Label>
-              </TableCell>
-            </TableRow>
+           
           </Table>
         </FlexBox>
         <Button
@@ -267,11 +181,11 @@ const CampaingComponent = () => {
         <Button
           className={'btn-step'}
           design={ButtonDesign.Emphasized}
-          onClick={() => getCampainInfo(userInfo?.membershipDetail?.uuid)}>
+          onClick={() => getCampainInfo("")}>
           Sorgula ve Devam Et
         </Button>
       </WizardStep>
-      <WizardStep id='3' ref={step3} icon="product" titleText="Kampanya Listesi">
+      <WizardStep id='3' ref={step3} icon="product" titleText="Okul Listesi">
         <FlexBox className={'table'}>
           <Table
             columns={
@@ -295,7 +209,7 @@ const CampaingComponent = () => {
             }
           >
 
-            {CampaingList &&  <ListRow param={CampaingList} /> }
+            {/* {CampaingList &&  <ListRow param={CampaingList} /> } */}
           </Table>
 
         </FlexBox>
@@ -307,7 +221,7 @@ const CampaingComponent = () => {
           Geri
         </Button>
       </WizardStep>
-      <WizardStep id='4'  ref={step4} icon="product" titleText="Kampanya Detayı"  >
+      <WizardStep id='4'  ref={step4} icon="product" titleText="Okul Detayı"  >
 
         <Page backgroundDesign="Solid"  
   
@@ -318,26 +232,24 @@ const CampaingComponent = () => {
     >
         <div>
    <p>
-     Kapmanya Adı :   <strong> {campaingDetail?.campaign?.name}</strong>
+     Kapmanya Adı :   
    </p>
    <p>
-    Durumu :   <strong> {campaingDetail?.campaign?.statusType?.statusTypeId}</strong>
+    Durumu :   
    </p>
    <p>
-     Başlangıç Tarihi :   <strong> {campaingDetail?.campaign?.startDateTime}</strong>
+     Başlangıç Tarihi :   
    </p>
    <p>
-     Bitiş  Tarihi :   <strong> {campaingDetail?.campaign?.endDateTime}</strong>
+     Bitiş  Tarihi :  
    </p>
    <p>
-    Kampanya Tipi :   <strong> {campaingDetail?.campaign?.campaignType?.name}</strong>
+    Kampanya Tipi :   
    </p>
   </div>
 
   <Button
-         
           design={ButtonDesign.Attention}
-          onClick={ SendCampign }
         >
         Kampanya kullan
         </Button>

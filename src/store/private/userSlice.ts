@@ -2,31 +2,34 @@ import { createSlice, createAction } from "@reduxjs/toolkit";
 const userSlice = createSlice({
     name: "userInformation",
     initialState:{
-        userInfo: null,
-        pointInfo: null,
-        CampaingList:null,
+        cityList: [],
+        districtsList: [null],
+        cramschoolsList:null,
         userLoader :true,
-        selectCampaing:null
+        quotasList:null
     },
     reducers: {
-        setUserinfo: (state, { payload }) => {
-            state.userInfo = payload;
+        setCityList: (state, { payload }) => {
+            state.cityList = payload;
             state.userLoader = false;
         },
-        setPointConversion: (state, { payload }) => {
-            state.pointInfo =payload;
+        setDistrictsList: (state, { payload }) => {
+            state.districtsList =payload;
+            state.userLoader = false;
         },
-        setCampaingList: (state, { payload }) => {
-            state.CampaingList =payload;
+        setCramschoolsList: (state, { payload }) => {
+            state.cramschoolsList =payload;
+            state.userLoader = false;
         },
-        setSelectCampaing: (state, { payload }) => {
-            state.selectCampaing =payload;
+        setQuotasList: (state, { payload }) => {
+            state.quotasList =payload;
+            state.userLoader = false;
         },
     },
 });
 
 export const userData = (state:any) => state.userInformation; // state üzerindeki bilgileri dışarı aktarma
 
-export const { setUserinfo, setPointConversion,setCampaingList ,setSelectCampaing} = userSlice.actions; // functions dışarıya aktarılması
+export const { setCityList, setDistrictsList,setCramschoolsList ,setQuotasList} = userSlice.actions; // functions dışarıya aktarılması
 
 export default userSlice.reducer;
